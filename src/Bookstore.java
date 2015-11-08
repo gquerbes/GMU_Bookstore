@@ -7,6 +7,8 @@ public class Bookstore {
 		
 		
 	}
-	public static adduser(){}
+	
+	
+	public static somethingelse(){}
 
 }
