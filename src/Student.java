@@ -16,7 +16,7 @@ public class Student {
     private String shippingAddress;
     
     
-    private ArrayList<Course> courses = new ArrayList<>();
+    private Course[] courses;
     private static int numStudents = 0;
     
     
@@ -140,8 +140,8 @@ public class Student {
         }
     }
 
-    public void addCourse(Course courses) {
-        this.courses.add(courses);
+    public void addCourse(Course[] courses) {
+        this.courses = courses;
     }
 
     public String getFirstName() {
@@ -174,8 +174,8 @@ public class Student {
 
     public String getCourses() {
         String output = "";
-        for(int i =0; i < courses.size()-1; i++) {
-            output += courses.get(i).getCourseName() + "\n";
+        for(int i =0; i < courses.length; i++) {
+            output += courses[i].getCourseName() + "\n";
         }
         return output;
     }
