@@ -13,15 +13,25 @@ public class Bookstore {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		populateCourses();
+		
+		//create array of all courses
+		Course[] allCourses = populateCourses();
+		
+		//populate student accounts from file
 		populateStudentAccounts();
+		
+		Student aStudent = login();
+		
+		//send current student to menu for textbook ordering
+		menu(aStudent, allCourses);
 	}
 	
 	
 	/**
 	 * Open courses text file and populate courses based on info
 	 */
-	public static void populateCourses(){
+	public static Course[] populateCourses(){
+		Course[] allCourses = new Course[20];
 		Scanner inputStream = null;
 		
 		try{
@@ -34,6 +44,9 @@ public class Bookstore {
 		}
 		JOptionPane.showMessageDialog(null, "courses file opened");
 		//TODO create course objects using text file data
+		
+		
+		return allCourses;
 	}
 	
 	
@@ -55,6 +68,42 @@ public class Bookstore {
 		//TODO create account objects based on text file info	
 	}
 	
+	
+	/**
+	 * Prompt student with list of courses and add each on based on selection to their list of courses
+	 * @param allCourses
+	 * @param aStudent
+	 */
+	public static void menu (Course [] allCourses, Student aStudent){
+		int selection;
+		boolean more;
+		String menuPrompt = "Welcome to the GMU IT Bookstore!"
+				+ "\nPlease enter the number that corresponds to one of your classes";
+		for(int i =0; i<Course.getNumCourses(); i++){
+			menuPrompt += "\n"+ (i+1) +") "+ allCourses[i].getCourseName();
+		}
+		
+		do{
+			do{
+				try{
+					selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
+				}
+				catch(NumberFormatException e){
+					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
+				}
+			}while (selection >= Course.getNumCourses() || selection < 0);
+			
+			//add a course to student list of courses
+			aStudent.addCourse(allCourses[selection]);
+			
+			//prompt student if they would like to continue entering courses
+			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
+			if (reply ==0){more = false;}
+			else more = true;
+		}while (more);
+		
+	
+	}
 	
 	
 	/**
@@ -80,7 +129,8 @@ public class Bookstore {
 		}while (!validateUsername(username));
 		
 		//create student object
-		Student aStudent = new Student();
+		Student aStudent = new Student(username);
+		
 		
 		//prompt for password until valid entry is given
 		do{
@@ -138,15 +188,26 @@ public class Bookstore {
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
 		}while(!aStudent.setShipAddress(address));
+		
+		//TODO add student to linked list / stack
+		
+		JOptionPane.showMessageDialog(null, "Your account has been created");
+		
+		
 	}
 	
 	
 	/**
 	 * 
 	 */
-	public static void login(){
+	public static Student login(){
+		Student aStudent;
 		String username = JOptionPane.showInputDialog(null, "Enter username");
 		String password = JOptionPane.showInputDialog(null, "Please enter your password");
+		
+		//Loop through users and look for match, If non found, use 'registerStudenAccount' method to create and return a student
+		
+		return aStudent;
 	}
 	
 	
