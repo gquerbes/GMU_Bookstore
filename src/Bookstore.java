@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+
 import java.util.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -13,9 +14,7 @@ public class Bookstore {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		populateCourses();
-		populateAccounts();
-		
-		
+		populateStudentAccounts();
 	}
 	
 	
@@ -41,7 +40,7 @@ public class Bookstore {
 	/**
 	 * Open accounts file and create student accounts based on info
 	 */
-	public static void populateAccounts(){
+	public static void populateStudentAccounts(){
 		Scanner inputStream = null;
 		
 		try{
@@ -61,9 +60,18 @@ public class Bookstore {
 	/**
 	 * Create new account 
 	 */
-	public static void registerStudent(){
+	public static void registerStudentAccount(){
 		String username;
 		String password;
+		String first;
+		String last;
+		String GNum;
+		String phoneNum;
+		String email;
+		String address;
+		
+		
+		//prompt for username until available username is entered
 		do{
 			username = JOptionPane.showInputDialog("Please enter desired username");
 			if (!validateUsername(username)){
@@ -71,20 +79,73 @@ public class Bookstore {
 			}
 		}while (!validateUsername(username));
 		
-		password = JOptionPane.showInputDialog("Please enter desired password");
+		//create student object
+		Student aStudent = new Student();
 		
-//		Student aStudent = new Student();
-//		
-//		aStudent.setFName(JOptionPane.showInputDialog("Please enter your first name"));
-//		
-//		aStudent.setLName(JOptionPane.showInputDialog("Please enter your last name"));
-//		
-//		aStudent.setGNum(JOptionPane.showInputDialog("Please enter your G-number"));
+		//prompt for password until valid entry is given
+		do{
+			password = JOptionPane.showInputDialog("Please enter desired password");
+			if(!aStudent.setPassword(password)){
+				JOptionPane.showMessageDialog(null,"Password does not meet requirements \nTry Again.");
+			}
+		}while(!aStudent.setPassword(password));
+		
+		//prompt for first name until valid entry is made
+		do{
+			aStudent.setFName(JOptionPane.showInputDialog("Please enter your first name"));
+			if (!aStudent.setFName(first)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again.");
+			}
+		}while(!aStudent.setFName(first));
+		
+		
+		//prompt for last name until valid entry is made
+		do{
+			aStudent.setLName(JOptionPane.showInputDialog("Please enter your last name"));
+			if (!aStudent.setLName(last)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			}
+		}while(!aStudent.setLName(last));
+		
+		//prompt for G-Number until valid entry is made
+		do{
+			aStudent.setGNum(JOptionPane.showInputDialog("Please enter your G-number"));
+			if(!aStudent.setGNum(GNum)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			}
+		}while(!aStudent.setGNum(GNum));
+		
+		//prompt for phone number until valid entry is made
+		do{
+			aStudent.setPhoneNumber(JOptionPane.showInputDialog("Please enter your phone number"));
+			if(!aStudent.setPhoneNumber(phoneNum)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			}
+		}while(!aStudent.setPhoneNumber(phoneNum));
+				
+		//prompt for email until valid entry is made
+		do{
+			aStudent.setEmail(JOptionPane.showInputDialog("Please enter your Email address"));
+			if(!aStudent.setEmail(email)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			}
+		}while(!aStudent.setEmail(email));
+		
+		//prompt for address until valid entry is made
+		do{
+			aStudent.setShipAddress(JOptionPane.showInputDialog("Please enter your shipping address"));
+			if(!aStudent.setShipAddress(address)){
+				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			}
+		}while(!aStudent.setShipAddress(address));
 	}
 	
 	
+	/**
+	 * 
+	 */
 	public static void login(){
-		String username = JOptionPane.showInputDialog(null, "enter username");
+		String username = JOptionPane.showInputDialog(null, "Enter username");
 		String password = JOptionPane.showInputDialog(null, "Please enter your password");
 	}
 	
