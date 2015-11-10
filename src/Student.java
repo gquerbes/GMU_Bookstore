@@ -13,21 +13,20 @@ public class Student {
     private String password;
     private String phoneNumber;
     private String email;
+    private String username;
     private String shippingAddress;
     
     
-    private Course[] courses;
+    private Course[] courses = new Course [20];
     private static int numStudents = 0;
     
     
     public Student() {
-        this("", "", "");
+        this("");
     }
     
-    public Student(String firstName, String lastName, String gNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.gNumber = gNumber;
+    public Student(String username) {
+        this.username = username;
         numStudents++;
     }
 
@@ -139,9 +138,20 @@ public class Student {
         return true;
         }
     }
+    
+    public boolean setUsername(String username){
+    	if (username.length() == 0){
+    		return false;
+    	}
+    	else{
+    		this.username = username;
+    		return true;
+    	}
+    }
 
-    public void addCourse(Course[] courses) {
-        this.courses = courses;
+    public void addCourse(Course acourse) {
+        //this.courses = courses; 
+    	//TODO Method needs to accept a signle course and add it to list of all courses.
     }
 
     public String getFirstName() {
@@ -171,7 +181,10 @@ public class Student {
     public String getShippingAddress() {
         return shippingAddress;
     }
-
+    
+    public String getUsername(){
+    	return username;
+    }
     public String getCourses() {
         String output = "";
         for(int i =0; i < courses.length; i++) {
