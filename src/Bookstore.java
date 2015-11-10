@@ -15,7 +15,9 @@ public class Bookstore {
 		// TODO Auto-generated method stub
 		
 		//create array of all courses
-		Course[] allCourses = populateCourses();
+		LinkedList <Course> courseList = new LinkedList<Course>();
+				
+		populateCourses(courseList);
 		
 		//linked list of students
 		LinkedList<Student> studentList = new LinkedList<Student>();
@@ -26,15 +28,15 @@ public class Bookstore {
 		Student aStudent = login();
 		
 		//send current student to menu for textbook ordering
-		menu(allCourses, aStudent);
+		menu(courseList, aStudent);
 	}
 	
 	
 	/**
 	 * Open courses text file and populate courses based on info
 	 */
-	public static Course[] populateCourses(){
-		Course[] allCourses = new Course[20];
+	public static void populateCourses(LinkedList <Course> courseList){
+		
 		Scanner inputStream = null;
 		
 		try{
@@ -46,11 +48,28 @@ public class Bookstore {
 			System.exit(0);
 		}
 		JOptionPane.showMessageDialog(null, "courses file opened");
-		//TODO create course objects using text file data
+		
+		//pull line of text to generate a course
+		while(inputStream.hasNextLine()){
+			String s1 = inputStream.nextLine();
+			//locate course name
+			int courseNameStart = (s1.indexOf("-")+1);
+			int courseNameEnd = (s1.lastIndexOf(","));
+			String courseName = s1.substring(courseNameStart, courseNameEnd);
+			//locate course text
+			String courseText = (s1.substring(courseNameEnd +1));
+			
+			//create course from info
+			Course aCourse = new Course (courseName);
+			aCourse.setCourseText(courseText);
+			
+			//add course to list
+			courseList.add(aCourse);
+		}
 		
 
 		
-		return allCourses;
+		
 	}
 	
 	
@@ -69,8 +88,8 @@ public class Bookstore {
 			System.exit(0);
 		}
 		JOptionPane.showMessageDialog(null, "account file opened");
-		//TODO create account objects based on text file info	
-		
+			
+		//Pull line of text to generate a student 
 		while(inputStream.hasNextLine()){
 			String s1 = inputStream.nextLine();		
 			//locate first name
@@ -105,11 +124,20 @@ public class Bookstore {
 			int addressStart = (s1.indexOf(",",usernameEnd)+1);
 			String address = s1.substring(addressStart);
 			
+			//create student object and populate info
+			Student aStudent = new Student(username);
+			aStudent.setFirstName(fName);
+			aStudent.setLastName(lName);
+			aStudent.setgNumber(gNumber);
+			aStudent.setPassword(password);
+			aStudent.setPhoneNumber(phoneNumber);
+			aStudent.setEmail(email);
+			aStudent.setShippingAddress(address);
 			
-			
-			
-			JOptionPane.showMessageDialog(null, fName + " "+ lName + " "+ gNumber+ " "+password+ " "+ phoneNumber+ " "+email+ " "+username+ " "+address);
+			//add Student to list
+			studentList.add(aStudent);			
 		}
+		
 	}
 	
 	
@@ -118,13 +146,14 @@ public class Bookstore {
 	 * @param allCourses
 	 * @param aStudent
 	 */
-	public static void menu (Course[] allCourses, Student aStudent){
+	public static void menu (LinkedList<Course> courseList, Student aStudent){
 		int selection = -1;
 		boolean more;
 		String menuPrompt = "Welcome to the GMU IT Bookstore!"
 				+ "\nPlease enter the number that corresponds to one of your classes";
 		for(int i =0; i<Course.getNumCourses(); i++){
-			menuPrompt += "\n"+ (i+1) +") "+ allCourses[i].getCourseName();
+			Course aCourse = courseList.get(i);
+			menuPrompt += "\n"+ (i+1) +") "+ aCourse.getCourseName();
 		}
 		
 		do{
@@ -138,7 +167,7 @@ public class Bookstore {
 			}while (selection >= Course.getNumCourses() || selection < 0);
 			
 			//add a course to student list of courses
-			aStudent.addCourse(allCourses[selection]);
+			aStudent.addCourse(courseList.get(selection));
 			
 			//prompt student if they would like to continue entering courses
 			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
@@ -258,12 +287,25 @@ public class Bookstore {
 	/**
 	 * @return true / false if username is available
 	 */
-	public static boolean validateUsername(String username){
-		boolean isValid = false;
+	public static boolean validateUsername(String username, LinkedList <Student> studentList){
+		boolean isValid = true;
+		
+		for(int i =0; i < studentList.size(); i++){
+			if (username.equals(studentList.get(i).getUsername())){
+				isValid = false;
+				return isValid;
+			}
+		}
 		
 		return isValid;
 	}
 	
+	
+	public static boolean validatePassword (Student aStudent, LinkedList <Student> studentList){
+		boolean isValid = false;
+		
+		return isValid;
+	}
 	
 	
 	
