@@ -54,6 +54,11 @@ public class Student {
             return true;
         }
     }
+    /**
+     * This method return false if the user input is empty
+     * @param inputCheck
+     * @return true or false
+     */
     private static boolean input(String inputCheck) {
         return inputCheck.trim().length() == 0;
         }
