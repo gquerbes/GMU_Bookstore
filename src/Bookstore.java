@@ -25,10 +25,10 @@ public class Bookstore {
 		//populate student accounts from file
 		populateStudentAccounts(studentList);
 		
-		Student aStudent = login();
+		Student aStudent = login(studentList);
 		
 		//send current student to menu for textbook ordering
-		menu(courseList, aStudent);
+		menu(courseList, aStudent, studentList);
 	}
 	
 	
@@ -47,22 +47,29 @@ public class Bookstore {
 			JOptionPane.showMessageDialog(null, "The system will now exit");
 			System.exit(0);
 		}
-		JOptionPane.showMessageDialog(null, "courses file opened");
+		
 		
 		//pull line of text to generate a course
 		while(inputStream.hasNextLine()){
 			String s1 = inputStream.nextLine();
 			//locate course name
 			int courseNameStart = (s1.indexOf("-")+1);
-			int courseNameEnd = (s1.lastIndexOf(","));
+			int courseNameEnd = (s1.indexOf(","));
 			String courseName = s1.substring(courseNameStart, courseNameEnd);
 			//locate course text
-			String courseText = (s1.substring(courseNameEnd +1));
+			int courseTextStart = (s1.indexOf(",",courseNameEnd)+1);
+			int courseTextEnd = (s1.indexOf(",",courseTextStart));
+			String courseText = (s1.substring(courseTextStart,courseTextEnd));
+			//locate text stock
+			int textStockStart = (s1.indexOf(",",courseTextStart)+1);
+			int textStock = Integer.parseInt(s1.substring(textStockStart));
 			
 			//create course from info
 			Course aCourse = new Course (courseName);
 			aCourse.setCourseText(courseText);
+			aCourse.setTextStock(textStock);
 			
+		
 			//add course to list
 			courseList.add(aCourse);
 		}
@@ -87,7 +94,7 @@ public class Bookstore {
 			JOptionPane.showMessageDialog(null, "The system will now exit");
 			System.exit(0);
 		}
-		JOptionPane.showMessageDialog(null, "account file opened");
+		
 			
 		//Pull line of text to generate a student 
 		while(inputStream.hasNextLine()){
@@ -146,7 +153,7 @@ public class Bookstore {
 	 * @param allCourses
 	 * @param aStudent
 	 */
-	public static void menu (LinkedList<Course> courseList, Student aStudent){
+	public static void menu (LinkedList<Course> courseList, Student aStudent, LinkedList <Student> studentList){
 		int selection = -1;
 		boolean more;
 		String menuPrompt = "Welcome to the GMU IT Bookstore!"
@@ -175,9 +182,14 @@ public class Bookstore {
 			
 			//prompt student if they would like to continue entering courses
 			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
-			if (reply ==0){more = false;}
+			if (reply == 1){more = false;}
 			else more = true;
 		}while (more);
+		
+		//Give confirmation of order
+		JOptionPane.showMessageDialog(null, "order entered");
+		
+		login(studentList);
 		
 	
 	}
@@ -186,7 +198,7 @@ public class Bookstore {
 	/**
 	 * Create new account 
 	 */
-	public static void registerStudentAccount(LinkedList <Student> studentList){
+	public static Student registerStudentAccount(LinkedList <Student> studentList){
 		String username ="";
 		String password ="";
 		String first ="";
@@ -219,7 +231,7 @@ public class Bookstore {
 		
 		//prompt for first name until valid entry is made
 		do{
-			aStudent.setFirstName(JOptionPane.showInputDialog("Please enter your first name"));
+			first = JOptionPane.showInputDialog("Please enter your first name");
 			if (!aStudent.setFirstName(first)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again.");
 			}
@@ -228,7 +240,7 @@ public class Bookstore {
 		
 		//prompt for last name until valid entry is made
 		do{
-			aStudent.setLastName(JOptionPane.showInputDialog("Please enter your last name"));
+			last = (JOptionPane.showInputDialog("Please enter your last name"));
 			if (!aStudent.setLastName(last)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
@@ -236,7 +248,7 @@ public class Bookstore {
 		
 		//prompt for G-Number until valid entry is made
 		do{
-			aStudent.setgNumber(JOptionPane.showInputDialog("Please enter your G-number"));
+			GNum = (JOptionPane.showInputDialog("Please enter your G-number"));
 			if(!aStudent.setgNumber(GNum)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
@@ -244,7 +256,7 @@ public class Bookstore {
 		
 		//prompt for phone number until valid entry is made
 		do{
-			aStudent.setPhoneNumber(JOptionPane.showInputDialog("Please enter your phone number"));
+			phoneNum = (JOptionPane.showInputDialog("Please enter your phone number"));
 			if(!aStudent.setPhoneNumber(phoneNum)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
@@ -252,7 +264,7 @@ public class Bookstore {
 				
 		//prompt for email until valid entry is made
 		do{
-			aStudent.setEmail(JOptionPane.showInputDialog("Please enter your Email address"));
+			email = (JOptionPane.showInputDialog("Please enter your Email address"));
 			if(!aStudent.setEmail(email)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
@@ -260,16 +272,17 @@ public class Bookstore {
 		
 		//prompt for address until valid entry is made
 		do{
-			aStudent.setShippingAddress(JOptionPane.showInputDialog("Please enter your shipping address"));
+			address = (JOptionPane.showInputDialog("Please enter your shipping address"));
 			if(!aStudent.setShippingAddress(address)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
 		}while(!aStudent.setShippingAddress(address));
 		
-		//TODO add student to linked list / stack
+		
 		
 		JOptionPane.showMessageDialog(null, "Your account has been created");
 		
+		return aStudent;
 		
 	}
 	
@@ -277,12 +290,33 @@ public class Bookstore {
 	/**
 	 * 
 	 */
-	public static Student login(){
-		Student aStudent = null;
+	public static Student login(LinkedList <Student> studentList){
+		
 		String username = JOptionPane.showInputDialog(null, "Enter username");
 		String password = JOptionPane.showInputDialog(null, "Please enter your password");
-		
+		Student aStudent = validateUsername(username,studentList);
+
 		//Loop through users and look for match, If non found, use 'registerStudenAccount' method to create and return a student
+		if(aStudent == null){
+			int selection = JOptionPane.showConfirmDialog(null, "Account does not exist\nWould you like to create a new account?\n'NO' to try another account 'YES' to create a new account","title", JOptionPane.YES_NO_OPTION);
+			if(selection == 1){
+				login(studentList);
+			}
+			else if (selection == 0){
+				aStudent = registerStudentAccount(studentList);
+			}
+		}
+		else{
+			if (!(validatePassword(aStudent,password))){
+				do{
+					password = JOptionPane.showInputDialog("Inncorrect password entered\nTry again or enter 'D' to try a different account");
+					if(password.equalsIgnoreCase("D")){
+						login(studentList);
+					}
+				}while(!(validatePassword(aStudent,password)));
+				
+			}
+		}
 		
 		return aStudent;
 	}
@@ -304,7 +338,7 @@ public class Bookstore {
 	}
 	
 	
-	public static boolean validatePassword (Student aStudent, String aPassword, LinkedList <Student> studentList){
+	public static boolean validatePassword (Student aStudent, String aPassword){
 		boolean isValid = false;
 		if (aStudent.getPassword().equals(aPassword)){
 			isValid = true;

@@ -1,4 +1,3 @@
-
 public class Student {
 
     public static int getNumStudents() {
@@ -13,8 +12,8 @@ public class Student {
     private String username;
     private String shippingAddress;
     
-    
-    private Course[] courses = new Course [20];
+    private int numCourses = 0;
+    private Course[] courses = new Course [10];
     private static int numStudents = 0;
     
     
@@ -147,8 +146,7 @@ public class Student {
     }
 
     public void addCourse(Course acourse) {
-        //this.courses = courses; 
-    	//TODO Method needs to accept a single course and add it to list of all courses.
+        this.courses[numCourses++] = acourse; 
     }
 
     public String getFirstName() {
@@ -184,7 +182,7 @@ public class Student {
     }
     public String getCourses() {
         String output = "";
-        for(int i =0; i < courses.length; i++) {
+        for(int i =0; i < numCourses; i++) {
             output += courses[i].getCourseName() + "\n";
         }
         return output;

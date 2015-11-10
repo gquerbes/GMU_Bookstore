@@ -12,11 +12,12 @@ public class Course {
     
     public Course(){
         this("");
-        numCourses++;
+        
     }
     
     public Course(String name) {
         this.courseName = name;
+        numCourses++;
     }
 
     public void setCourseName(String courseName) {
