@@ -1,7 +1,4 @@
 
-import java.util.ArrayList;
-
-
 public class Student {
 
     public static int getNumStudents() {
@@ -151,7 +148,7 @@ public class Student {
 
     public void addCourse(Course acourse) {
         //this.courses = courses; 
-    	//TODO Method needs to accept a signle course and add it to list of all courses.
+    	//TODO Method needs to accept a single course and add it to list of all courses.
     }
 
     public String getFirstName() {

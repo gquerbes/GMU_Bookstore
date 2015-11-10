@@ -151,11 +151,11 @@ public class Bookstore {
 		boolean more;
 		String menuPrompt = "Welcome to the GMU IT Bookstore!"
 				+ "\nPlease enter the number that corresponds to one of your classes";
-		for(int i =0; i<Course.getNumCourses(); i++){
+		for(int i =0; i<courseList.size(); i++){
 			Course aCourse = courseList.get(i);
 			menuPrompt += "\n"+ (i+1) +") "+ aCourse.getCourseName();
 		}
-		
+		JOptionPane.showMessageDialog(null, courseList.get(0));
 		do{
 			do{
 				try{
@@ -164,10 +164,14 @@ public class Bookstore {
 				catch(NumberFormatException e){
 					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
 				}
-			}while (selection >= Course.getNumCourses() || selection < 0);
+				if (selection > courseList.size() || selection <= 0){
+					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
+				}
+			}while (selection > courseList.size() || selection <= 0);
 			
 			//add a course to student list of courses
-			aStudent.addCourse(courseList.get(selection));
+			Course aCourse = (courseList.get(selection-1));
+			aStudent.addCourse(aCourse);
 			
 			//prompt student if they would like to continue entering courses
 			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
@@ -182,7 +186,7 @@ public class Bookstore {
 	/**
 	 * Create new account 
 	 */
-	public static void registerStudentAccount(){
+	public static void registerStudentAccount(LinkedList <Student> studentList){
 		String username ="";
 		String password ="";
 		String first ="";
@@ -196,10 +200,10 @@ public class Bookstore {
 		//prompt for username until available username is entered
 		do{
 			username = JOptionPane.showInputDialog("Please enter desired username");
-			if (!validateUsername(username)){
+			if (!(validateUsername(username,studentList) == null)){
 				JOptionPane.showMessageDialog(null, "This username is already in use!\nPlease try again");
 			}
-		}while (!validateUsername(username));
+		}while (!(validateUsername(username,studentList) == null));
 		
 		//create student object
 		Student aStudent = new Student(username);
@@ -285,19 +289,18 @@ public class Bookstore {
 	
 	
 	/**
-	 * @return true / false if username is available
+	 * @return return student if username matches or null if no match is found
 	 */
-	public static boolean validateUsername(String username, LinkedList <Student> studentList){
-		boolean isValid = true;
-		
+	public static Student validateUsername(String username, LinkedList <Student> studentList){
+		Student aStudent = null;
 		for(int i =0; i < studentList.size(); i++){
 			if (username.equals(studentList.get(i).getUsername())){
-				isValid = false;
-				return isValid;
+				aStudent = studentList.get(i);
+				return aStudent;
 			}
 		}
 		
-		return isValid;
+		return aStudent;
 	}
 	
 	
