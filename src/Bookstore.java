@@ -304,9 +304,12 @@ public class Bookstore {
 	}
 	
 	
-	public static boolean validatePassword (Student aStudent, LinkedList <Student> studentList){
+	public static boolean validatePassword (Student aStudent, String aPassword, LinkedList <Student> studentList){
 		boolean isValid = false;
-		
+		if (aStudent.getPassword().equals(aPassword)){
+			isValid = true;
+		}
+		else {isValid = false;}
 		return isValid;
 	}
 	
