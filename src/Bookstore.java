@@ -347,7 +347,12 @@ public class Bookstore {
 		return isValid;
 	}
 	
-	
+	/**
+	 * This method is going to export data into text files
+	 */
+	public static void dataToFiles(){
+		
+	}
 	
 
 }
