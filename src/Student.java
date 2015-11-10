@@ -2,7 +2,7 @@
  * This is the data definition class for the Students.
  * It will store the student information
  * @author Ishan
- * @author Gabriel
+ * @author Gabriel Querbes
  *
  */
 		
