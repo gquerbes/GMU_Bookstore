@@ -165,7 +165,7 @@ public class Bookstore {
 			Course aCourse = courseList.get(i);
 			menuPrompt += "\n"+ (i+1) +") "+ aCourse.getCourseName();
 		}
-		JOptionPane.showMessageDialog(null, courseList.get(0));
+		
 		do{
 			do{
 				try{
@@ -192,7 +192,7 @@ public class Bookstore {
 		//Give confirmation of order
 		JOptionPane.showMessageDialog(null, "order entered");
 		
-		//login(studentList);
+		login(studentList);
 		
 	
 	}
@@ -294,6 +294,16 @@ public class Bookstore {
 	 * 
 	 */
 	public static Student login(LinkedList <Student> studentList){
+		String input = "";
+		do{
+			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
+			if (input.equals("2")){
+				JOptionPane.showMessageDialog(null, "Goodbye");
+				System.exit(0);
+			}
+			else if (input.equals("1")){}
+			else {JOptionPane.showMessageDialog(null,"Invalid selection, Try again.");}
+		}while (!(input.equals("1")));
 		
 		String username = JOptionPane.showInputDialog(null, "Enter username");
 		String password = JOptionPane.showInputDialog(null, "Please enter your password");
