@@ -29,6 +29,9 @@ public class Bookstore {
 		
 		//send current student to menu for textbook ordering
 		menu(courseList, aStudent, studentList);
+		
+		//outputs the textbook reservation to a file
+		dataToFiles(courseList);
 	}
 	
 	
@@ -189,7 +192,7 @@ public class Bookstore {
 		//Give confirmation of order
 		JOptionPane.showMessageDialog(null, "order entered");
 		
-		login(studentList);
+		//login(studentList);
 		
 	
 	}
@@ -350,8 +353,21 @@ public class Bookstore {
 	/**
 	 * This method is going to export data into text files
 	 */
-	public static void dataToFiles(){
-		
+	public static void dataToFiles(LinkedList<Course> courseList){
+		try { 
+		PrintWriter pw = new PrintWriter(new FileOutputStream("stockUpdate.txt"));
+		 
+         for(int i = 0; i < courseList.size(); i++) {
+             if(courseList.get(i) != null) 
+                pw.write("Course name: "+courseList.get(i).getCourseName() +" Text: " + courseList.get(i).getCourseText() +", and the stock remaining: "+courseList.get(i).getTextStock() + "\r\n");
+             	
+         }
+         pw.close();
+         JOptionPane.showMessageDialog(null, "The textbook stock is stored in a text file.", "GMU BookStore", JOptionPane.INFORMATION_MESSAGE);
+		 }
+		 catch (FileNotFoundException e) {
+			 e.printStackTrace();
+		 }
 	}
 	
 
