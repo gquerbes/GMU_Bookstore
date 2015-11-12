@@ -9,22 +9,27 @@ import java.io.FileOutputStream;
 public class Bookstore {
 
 	/**
+	 * @author Gabriel Querbes
+	 * @author Ishan Shams
 	 * @param args
+	 * This program is designed to allow students to order books via the system 
+	 * for classes in the AIT department.
+	 * The system will populate a list of users and courses along with corresponding information from 2 separate text files.
+	 * When a student logs in or creates a new account they will be prompted to select the courses that they will be taking.
+	 * Upon system termination, the program will output a text file documenting the number of books left and needed to be ordered.
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
 		//create array of all courses
 		LinkedList <Course> courseList = new LinkedList<Course>();
-				
 		populateCourses(courseList);
 		
-		//linked list of students
-		LinkedList<Student> studentList = new LinkedList<Student>();
-		
 		//populate student accounts from file
+		LinkedList<Student> studentList = new LinkedList<Student>();
 		populateStudentAccounts(studentList);
 		
+		//take user to login screen
 		Student aStudent = login(studentList);
 		
 		//send current student to menu for textbook ordering
@@ -35,13 +40,16 @@ public class Bookstore {
 	}
 	
 	
+	
 	/**
-	 * Open courses text file and populate courses based on info
+	 * @param courseList
+	 *Create all courses based on text file input
 	 */
 	public static void populateCourses(LinkedList <Course> courseList){
 		
 		Scanner inputStream = null;
 		
+		//open text file 
 		try{
 			inputStream = new Scanner (new FileInputStream ("courses.txt"));
 		}
@@ -83,12 +91,14 @@ public class Bookstore {
 	}
 	
 	
+	
 	/**
-	 * Open accounts file and create student accounts based on info
+	 * @param studentList
+	 * Populate system with list of students accounts from text file
 	 */
 	public static void populateStudentAccounts(LinkedList <Student> studentList){
 		Scanner inputStream = null;
-		
+		//open text file of accounts
 		try{
 			inputStream = new Scanner (new FileInputStream("accounts.txt"));
 		}
@@ -192,14 +202,18 @@ public class Bookstore {
 		//Give confirmation of order
 		JOptionPane.showMessageDialog(null, "order entered");
 		
+		//return user to login screen
 		login(studentList);
 		
 	
 	}
 	
 	
+	
 	/**
-	 * Create new account 
+	 * @param studentList
+	 * @return Student
+	 * Register new student by prompting them for user info
 	 */
 	public static Student registerStudentAccount(LinkedList <Student> studentList){
 		String username ="";
@@ -290,10 +304,14 @@ public class Bookstore {
 	}
 	
 	
+
 	/**
-	 * 
+	 * @param studentList
+	 * @return student
+	 * Prompt username and password and find match, if no match give user option to create a new account
 	 */
 	public static Student login(LinkedList <Student> studentList){
+		//Prompt user to login or terminate systems
 		String input = "";
 		do{
 			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
@@ -319,6 +337,7 @@ public class Bookstore {
 				aStudent = registerStudentAccount(studentList);
 			}
 		}
+		//Alert use of incorrect passwords
 		else{
 			if (!(validatePassword(aStudent,password))){
 				do{
@@ -335,8 +354,12 @@ public class Bookstore {
 	}
 	
 	
+	
 	/**
-	 * @return return student if username matches or null if no match is found
+	 * @param username
+	 * @param studentList
+	 * @return student
+	 * Validate if user account exists
 	 */
 	public static Student validateUsername(String username, LinkedList <Student> studentList){
 		Student aStudent = null;
@@ -351,6 +374,12 @@ public class Bookstore {
 	}
 	
 	
+	/**
+	 * @param aStudent
+	 * @param aPassword
+	 * @return if valid
+	 * validate if password matches the user
+	 */
 	public static boolean validatePassword (Student aStudent, String aPassword){
 		boolean isValid = false;
 		if (aStudent.getPassword().equals(aPassword)){
@@ -360,7 +389,9 @@ public class Bookstore {
 		return isValid;
 	}
 	
+	
 	/**
+	 * @param courseList
 	 * This method is going to export data into text files
 	 */
 	public static void dataToFiles(LinkedList<Course> courseList){
