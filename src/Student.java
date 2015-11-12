@@ -50,7 +50,7 @@ public class Student {
      */
     public Boolean setFirstName(String firstName) {
         if (firstName.length() == 0) {
-            return false;
+            throw new IllegalArgumentException("Student's first name is empty");
         }
         else {
             this.firstName = firstName;  
@@ -64,7 +64,7 @@ public class Student {
      */
     public Boolean setLastName(String lastName) {
         if (lastName.length() == 0) {
-            return false;
+        	throw new IllegalArgumentException("Student's last name is empty");
         }
         else {
             this.lastName = lastName;  
@@ -131,7 +131,7 @@ public class Student {
             return true;
         }
         else {
-            return false;
+        	throw new IllegalArgumentException("Student's GNumber is invalid, it must be 8 digits (00xxxxxx");
         } 
     }
     /**
@@ -141,7 +141,7 @@ public class Student {
      */
     public Boolean setPassword(String password) {
         if (password.length() < 8) {
-            return false;
+        	throw new IllegalArgumentException("Student's password must be atleast 8 characters long");
         }
         else {
            this.password = password;
@@ -154,30 +154,42 @@ public class Student {
      * @param phoneNumber
      * @return boolean result
      */
-    public Boolean setPhoneNumber(String phoneNumber) {
+    public boolean setPhoneNumber(String phoneNumber) {
         if (!input(phoneNumber) && isValidPhoneNumber(phoneNumber)) {
             this.phoneNumber = phoneNumber;
             return true;
         }
         else {
-            return false;
+        	return false;
         } 
-
     }
     /**
      * This method sets the student's email address.
      * @param email
      * @return boolean
      */
-    public Boolean setEmail(String email) {
-        if(email.contains("@")&&(email.contains("."))&&(email.indexOf('@') < email.indexOf('.'))) {
-        this.email = email;
-        return true;
+    public boolean setEmail(String email) {
+        char dot = '.';
+        int ATposition = email.indexOf('@');
+        int DOTposition = email.indexOf('.');
+        
+        if (ATposition > 0) {
+            if(DOTposition > 0) {
+                if (email.substring(0, ATposition).contains(".") || email.charAt(ATposition+1) == dot) {
+                    throw new IllegalArgumentException("Sorry! Invalid position of the dot");
+                }
+                else {
+                    this.email = email;
+                    return true;
+                }
+            }
+            else {
+                throw new IllegalArgumentException("Sorry! You must enter a valid email.");
+            }
         }
         else {
-            return false;
+            throw new IllegalArgumentException("Sorry! You must enter a valid email.");
         }
-        
     }
     /**
      * This method sets the student's shipping address
@@ -186,7 +198,7 @@ public class Student {
      */
     public Boolean setShippingAddress(String shippingAddress) {
         if(shippingAddress.length() == 0) {
-            return false;
+        	throw new IllegalArgumentException("Sorry! You must enter a valid email address.");
         }
         else {
         this.shippingAddress = shippingAddress;
@@ -200,7 +212,7 @@ public class Student {
      */
     public boolean setUsername(String username){
     	if (username.length() == 0){
-    		return false;
+    		throw new IllegalArgumentException("Sorry! You must enter a valid username.");
     	}
     	else{
     		this.username = username;
