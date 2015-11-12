@@ -35,8 +35,7 @@ public class Bookstore {
 		//send current student to menu for textbook ordering
 		menu(courseList, aStudent, studentList);
 		
-		//outputs the textbook reservation to a file
-		dataToFiles(courseList);
+		
 	}
 	
 	
@@ -199,8 +198,11 @@ public class Bookstore {
 			else more = true;
 		}while (more);
 		
+		
 		//Give confirmation of order
 		JOptionPane.showMessageDialog(null, "order entered");
+		//outputs the textbook reservation to a file
+		dataToFiles(courseList);
 		
 		//return user to login screen
 		login(studentList);
@@ -217,13 +219,13 @@ public class Bookstore {
 	 */
 	public static Student registerStudentAccount(LinkedList <Student> studentList){
 		String username ="";
-		String password ="";
-		String first ="";
-		String last ="";
-		String GNum ="";
-		String phoneNum ="";
-		String email ="";
-		String address ="";
+		boolean password = false;
+		boolean first =false;
+		boolean last =false;
+		boolean GNum =false;
+		boolean phoneNum =false;
+		boolean email = false;
+		boolean address = false;
 		
 		
 		//prompt for username until available username is entered
@@ -240,62 +242,103 @@ public class Bookstore {
 		
 		//prompt for password until valid entry is given
 		do{
-			password = JOptionPane.showInputDialog("Please enter desired password");
-			if(!aStudent.setPassword(password)){
-				JOptionPane.showMessageDialog(null,"Password does not meet requirements \nTry Again.");
+			try {
+				password = aStudent.setPassword(JOptionPane.showInputDialog("Please enter desired password"));
 			}
-		}while(!aStudent.setPassword(password));
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid password", "Invalid option selected", 0);
+			}
+		}while(!password);
+		
 		
 		//prompt for first name until valid entry is made
 		do{
-			first = JOptionPane.showInputDialog("Please enter your first name");
-			if (!aStudent.setFirstName(first)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again.");
+			try {
+				first = aStudent.setFirstName(JOptionPane.showInputDialog("Please enter your first name"));
 			}
-		}while(!aStudent.setFirstName(first));
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid first name", "Invalid option selected", 0);
+			}
+		}while(!first);
+		
 		
 		
 		//prompt for last name until valid entry is made
 		do{
-			last = (JOptionPane.showInputDialog("Please enter your last name"));
-			if (!aStudent.setLastName(last)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			try {
+				last = aStudent.setLastName(JOptionPane.showInputDialog("Please enter your last name"));
 			}
-		}while(!aStudent.setLastName(last));
-		
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid last name", "Invalid option selected", 0);
+			}
+		}while(!last);
+				
 		//prompt for G-Number until valid entry is made
 		do{
-			GNum = (JOptionPane.showInputDialog("Please enter your G-number"));
-			if(!aStudent.setgNumber(GNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			try {
+				GNum = aStudent.setgNumber(JOptionPane.showInputDialog("Please enter your G-number"));
 			}
-		}while(!aStudent.setgNumber(GNum));
-		
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid G-Number", "Invalid option selected", 0);
+			}
+		}while(!GNum);
+				
 		//prompt for phone number until valid entry is made
 		do{
-			phoneNum = (JOptionPane.showInputDialog("Please enter your phone number"));
-			if(!aStudent.setPhoneNumber(phoneNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			try {
+				phoneNum = aStudent.setPhoneNumber(JOptionPane.showInputDialog("Please enter your phone number"));
+				if(phoneNum == false) {
+					JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid phone number", "Invalid option selected", 0);
+					
+				}
 			}
-		}while(!aStudent.setPhoneNumber(phoneNum));
-				
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid phone number", "Invalid option selected", 0);
+			}
+		}while(!phoneNum);
+		
+		
 		//prompt for email until valid entry is made
 		do{
-			email = (JOptionPane.showInputDialog("Please enter your Email address"));
-			if(!aStudent.setEmail(email)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			try {
+				email = aStudent.setEmail(JOptionPane.showInputDialog("Please enter your email address"));
 			}
-		}while(!aStudent.setEmail(email));
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid email address", "Invalid option selected", 0);
+			}
+		}while(!email);
+		
 		
 		//prompt for address until valid entry is made
 		do{
-			address = (JOptionPane.showInputDialog("Please enter your shipping address"));
-			if(!aStudent.setShippingAddress(address)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+			try {
+				address = aStudent.setShippingAddress(JOptionPane.showInputDialog("Please enter your shipping address"));
 			}
-		}while(!aStudent.setShippingAddress(address));
-		
-		
+			catch (IllegalArgumentException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage(), "No input found", 0);
+			}
+			catch (NullPointerException e) {
+				JOptionPane.showMessageDialog(null, "Sorry! You must enter a valid shipping address", "Invalid option selected", 0);
+			}
+		}while(!address);
 		
 		JOptionPane.showMessageDialog(null, "Your account has been created");
 		
