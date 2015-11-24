@@ -18,6 +18,13 @@ public class Bookstore {
 	 * When a student logs in or creates a new account they will be prompted to select the courses that they will be taking.
 	 * Upon system termination, the program will output a text file documenting the number of books left and needed to be ordered.
 	 */
+	
+	/**
+	 * Create itemized list of input values to prevent errors during presentation
+	 * ensure that students can only register for 6 classes
+	 * do not allow students to select the same class more than once
+	 * 
+	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
