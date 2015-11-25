@@ -22,7 +22,7 @@ public class Bookstore {
 	/**
 	 * Create itemized list of input values to prevent errors during presentation
 	 * ensure that students can only register for 6 classes
-	 * do not allow students to select the same class more than once
+	 * do not allow students to select the same class more than ONCE
 	 * 
 	 */
 	public static void main(String[] args) {
