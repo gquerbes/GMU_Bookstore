@@ -348,7 +348,7 @@ public class Bookstore {
 		else{
 			if (!(validatePassword(aStudent,password))){
 				do{
-					password = JOptionPane.showInputDialog("Inncorrect password entered\nTry again or enter 'D' to try a different account");
+					password = JOptionPane.showInputDialog("Inncorrect password entered\nTry again or enter 'D' to return to main screen");
 					if(password.equalsIgnoreCase("D")){
 						login(studentList);
 					}
