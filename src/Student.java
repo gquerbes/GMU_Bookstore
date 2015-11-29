@@ -282,6 +282,15 @@ public class Student {
         }
         return output;
     }
+    
+    
+    /**
+     * Returns the linked list of courses
+     * @return course list
+     */
+    public LinkedList<Course> getCourseList(){
+    	return courses;
+    }
     /**
      * This method returns basic student information, that includes student's name, Gnumber, and the list of courses.
      * @return basic student information

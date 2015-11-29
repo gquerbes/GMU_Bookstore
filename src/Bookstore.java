@@ -21,9 +21,6 @@ public class Bookstore {
 	
 	/**
 	 * Create itemized list of input values to prevent errors during presentation
-	 * ensure that students can only register for 6 classes
-	 * do not allow students to select the same class more than ONCE
-	 * 
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -37,7 +34,7 @@ public class Bookstore {
 		populateStudentAccounts(studentList);
 		
 		//take user to login screen
-		Student aStudent = login(studentList);
+		Student aStudent = login(studentList,courseList);
 		
 		//send current student to menu for textbook ordering
 		menu(courseList, aStudent, studentList);
@@ -73,7 +70,7 @@ public class Bookstore {
 			//locate course name
 			int courseNameStart = (s1.indexOf("-")+1);
 			int courseNameEnd = (s1.indexOf(","));
-			String courseName = s1.substring(courseNameStart, courseNameEnd);
+			String courseName = s1.substring(courseNameStart,courseNameEnd);
 			//locate course text
 			int courseTextStart = (s1.indexOf(",",courseNameEnd)+1);
 			int courseTextEnd = (s1.indexOf(",",courseTextStart));
@@ -175,6 +172,8 @@ public class Bookstore {
 	 */
 	public static void menu (LinkedList<Course> courseList, Student aStudent, LinkedList <Student> studentList){
 		int selection = -1;
+		final int MAX_COURSES = 7;
+		int numCourses = 0;
 		boolean more;
 		String menuPrompt = "Welcome to the GMU IT Bookstore!"
 				+ "\nPlease enter the number that corresponds to one of your classes";
@@ -196,21 +195,32 @@ public class Bookstore {
 				}
 			}while (selection > courseList.size() || selection <= 0);
 			
-			//add a course to student list of courses
-			Course aCourse = (courseList.get(selection-1));
-			aStudent.addCourse(aCourse);
+			//add a course to student list of courses if its not already added to student's courses
+			if(aStudent.getCourseList().contains(courseList.get(selection-1))){
+				JOptionPane.showMessageDialog(null,"You have already ordered this book");
+			}
+			else if(numCourses >= MAX_COURSES){
+				JOptionPane.showMessageDialog(null,"You have already registered "+ MAX_COURSES + " courses, the max number allowed");
+				break;
+			}
+			else{
+				Course aCourse = (courseList.get(selection-1));
+				aStudent.addCourse(aCourse);
+				numCourses++;
+			}
+			
 			
 			//prompt student if they would like to continue entering courses
 			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
 			if (reply == 1){more = false;}
-			else more = true;
-		}while (more);
+			else {more = true;}
+		}while (more && (numCourses < MAX_COURSES));
 		
 		//Give confirmation of order
-		JOptionPane.showMessageDialog(null, "order entered");
+		JOptionPane.showMessageDialog(null, "Your order has been entered");
 		
 		//return user to login screen
-		login(studentList);
+		login(studentList,courseList);
 		
 	
 	}
@@ -317,14 +327,14 @@ public class Bookstore {
 	 * @return student
 	 * Prompt username and password and find match, if no match give user option to create a new account
 	 */
-	public static Student login(LinkedList <Student> studentList){
+	public static Student login(LinkedList <Student> studentList,LinkedList<Course> courseList){
 		//Prompt user to login or terminate systems
 		String input = "";
 		do{
 			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
 			if (input.equals("2")){
 				JOptionPane.showMessageDialog(null, "Goodbye");
-				System.exit(0);
+				dataToFiles(courseList);
 			}
 			else if (input.equals("1")){}
 			else {JOptionPane.showMessageDialog(null,"Invalid selection, Try again.");}
@@ -338,7 +348,7 @@ public class Bookstore {
 		if(aStudent == null){
 			int selection = JOptionPane.showConfirmDialog(null, "Account does not exist\nWould you like to create a new account?\n'NO' to try another account 'YES' to create a new account","title", JOptionPane.YES_NO_OPTION);
 			if(selection == 1){
-				login(studentList);
+				login(studentList,courseList);
 			}
 			else if (selection == 0){
 				aStudent = registerStudentAccount(studentList);
@@ -350,7 +360,7 @@ public class Bookstore {
 				do{
 					password = JOptionPane.showInputDialog("Inncorrect password entered\nTry again or enter 'D' to return to main screen");
 					if(password.equalsIgnoreCase("D")){
-						login(studentList);
+						login(studentList,courseList);
 					}
 				}while(!(validatePassword(aStudent,password)));
 				
@@ -416,6 +426,7 @@ public class Bookstore {
 		 catch (FileNotFoundException e) {
 			 e.printStackTrace();
 		 }
+		System.exit(0);
 	}
 	
 
