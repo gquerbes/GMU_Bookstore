@@ -34,10 +34,12 @@ public class Bookstore {
 		populateStudentAccounts(studentList);
 		
 		//take user to login screen
-		Student aStudent = login(studentList,courseList);
+		//Student aStudent = login(studentList,courseList);
+		
+		login(studentList,courseList);
 		
 		//send current student to menu for textbook ordering
-		menu(courseList, aStudent, studentList);
+		//menu(courseList, aStudent, studentList);
 		
 		//outputs the textbook reservation to a file
 		dataToFiles(courseList);
@@ -320,6 +322,7 @@ public class Bookstore {
 		
 		JOptionPane.showMessageDialog(null, "Your account has been created");
 		
+		
 		return aStudent;
 		
 	}
@@ -331,7 +334,7 @@ public class Bookstore {
 	 * @return student
 	 * Prompt username and password and find match, if no match give user option to create a new account
 	 */
-	public static Student login(LinkedList <Student> studentList,LinkedList<Course> courseList){
+	public static void login(LinkedList <Student> studentList,LinkedList<Course> courseList){
 		//Prompt user to login or terminate systems
 		String input = "";
 		do{
@@ -371,7 +374,8 @@ public class Bookstore {
 			}
 		}
 		
-		return aStudent;
+		menu(courseList,aStudent,studentList);
+		
 	}
 	
 	
