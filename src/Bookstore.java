@@ -239,18 +239,19 @@ public class Bookstore {
 		String phoneNum ="";
 		String email ="";
 		String address ="";
-		
+		Student aStudent=null;
 		
 		//prompt for username until available username is entered
 		do{
 			username = JOptionPane.showInputDialog("Please enter desired username");
-			if (!(validateUsername(username,studentList) == null)){
+			aStudent = validateUsername(username,studentList);
+			if (aStudent != null){
 				JOptionPane.showMessageDialog(null, "This username is already in use!\nPlease try again");
 			}
-		}while (!(validateUsername(username,studentList) == null));
+		}while (aStudent != null);
 		
 		//create student object
-		Student aStudent = new Student(username);
+		 aStudent = new Student(username);
 		
 		
 		//prompt for password until valid entry is given
@@ -315,8 +316,8 @@ public class Bookstore {
 		JOptionPane.showMessageDialog(null, "Your account has been created");
 		
 		
+		studentList.add(aStudent);
 		return aStudent;
-		
 	}
 	
 	
