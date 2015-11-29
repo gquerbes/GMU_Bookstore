@@ -90,13 +90,7 @@ public class Bookstore {
 			//add course to list
 			courseList.add(aCourse);
 		}
-		
-
-		
-		
 	}
-	
-	
 	
 	/**
 	 * @param studentList
@@ -175,7 +169,6 @@ public class Bookstore {
 	public static void menu (LinkedList<Course> courseList, Student aStudent, LinkedList <Student> studentList){
 		int selection = -1;
 		final int MAX_COURSES = 7;
-		int numCourses = 0;
 		boolean more;
 		String menuPrompt = "Welcome to the GMU IT Bookstore!"
 				+ "\nPlease enter the number that corresponds to one of your classes";
@@ -201,7 +194,7 @@ public class Bookstore {
 			if(aStudent.getCourseList().contains(courseList.get(selection-1))){
 				JOptionPane.showMessageDialog(null,"You have already ordered this book");
 			}
-			else if(numCourses >= MAX_COURSES){
+			else if(aStudent.getCourseList().size() >= MAX_COURSES){
 				JOptionPane.showMessageDialog(null,"You have already registered "+ MAX_COURSES + " courses, the max number allowed");
 				break;
 			}
@@ -210,9 +203,8 @@ public class Bookstore {
 					JOptionPane.showMessageDialog(null,"This book is backordered and will take extra processing time");
 				}
 				Course aCourse = (courseList.get(selection-1));
-				aStudent.addCourse(aCourse);
-				numCourses++;
-				
+				aStudent.addCourse(aCourse);	
+				JOptionPane.showMessageDialog(null, courseList.get(selection-1).getCourseText() +" Has been added to your cart");
 			}
 			
 			
@@ -220,10 +212,10 @@ public class Bookstore {
 			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
 			if (reply == 1){more = false;}
 			else {more = true;}
-		}while (more && (numCourses < MAX_COURSES));
+		}while (more && (aStudent.getCourseList().size() <= MAX_COURSES));
 		
 		//Give confirmation of order
-		JOptionPane.showMessageDialog(null, "Your order has been entered");
+		JOptionPane.showMessageDialog(null, "Your order has been entered\n");
 		
 		//return user to login screen
 		login(studentList,courseList);
