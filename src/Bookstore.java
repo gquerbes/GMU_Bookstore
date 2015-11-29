@@ -204,12 +204,13 @@ public class Bookstore {
 				break;
 			}
 			else{
-				Course aCourse = (courseList.get(selection-1));
-				aStudent.addCourse(aCourse);
-				numCourses++;
 				if(courseList.get(selection-1).getTextStock()<1){
 					JOptionPane.showMessageDialog(null,"This book is backordered and will take extra processing time");
 				}
+				Course aCourse = (courseList.get(selection-1));
+				aStudent.addCourse(aCourse);
+				numCourses++;
+				
 			}
 			
 			

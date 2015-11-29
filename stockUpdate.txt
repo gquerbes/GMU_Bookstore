@@ -1,5 +1,5 @@
-Course name: IT306 Text: Data Structures and Algorithms, and the stock remaining: -1
-Course name: IT315 Text: iOS 8 for Programmers, and the stock remaining: 9
+Course name: IT306 Text: Data Structures and Algorithms, and the stock remaining: 0
+Course name: IT315 Text: iOS 8 for Programmers, and the stock remaining: 10
 Course name: IT314 Text: Oracle 11g SQL, and the stock remaining: -1
 Course name: IT206 Text: Big Java Late Objects, and the stock remaining: 5
 Course name: IT207 Text: PHP Programming with MySQL, and the stock remaining: 20

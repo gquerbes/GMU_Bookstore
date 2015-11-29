@@ -1,4 +1,4 @@
--IT306,Data Structures and Algorithms,0
+-IT306,Data Structures and Algorithms,1
 -IT315,iOS 8 for Programmers,10
 -IT314,Oracle 11g SQL,0
 -IT206,Big Java Late Objects,5
