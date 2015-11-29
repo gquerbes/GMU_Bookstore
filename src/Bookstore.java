@@ -207,6 +207,9 @@ public class Bookstore {
 				Course aCourse = (courseList.get(selection-1));
 				aStudent.addCourse(aCourse);
 				numCourses++;
+				if(courseList.get(selection-1).getTextStock()<1){
+					JOptionPane.showMessageDialog(null,"This book is backordered and will take extra processing time");
+				}
 			}
 			
 			
@@ -358,7 +361,7 @@ public class Bookstore {
 		else{
 			if (!(validatePassword(aStudent,password))){
 				do{
-					password = JOptionPane.showInputDialog("Inncorrect password entered\nTry again or enter 'D' to return to main screen");
+					password = JOptionPane.showInputDialog("Incorrect password entered\nTry again or enter 'D' to return to main screen");
 					if(password.equalsIgnoreCase("D")){
 						login(studentList,courseList);
 					}
