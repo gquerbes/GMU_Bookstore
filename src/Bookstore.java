@@ -181,13 +181,21 @@ public class Bookstore {
 			do{
 				try{
 					selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
+					
+					if (selection > courseList.size() || selection <= 0){
+						throw new IllegalArgumentException();
+						
+					}
 				}
 				catch(NumberFormatException e){
 					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
+					selection = -1;
 				}
-				if (selection > courseList.size() || selection <= 0){
+				catch(IllegalArgumentException e) {
 					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
+					selection = -1;
 				}
+				
 			}while (selection > courseList.size() || selection <= 0);
 			
 			//add a course to student list of courses if its not already added to student's courses
