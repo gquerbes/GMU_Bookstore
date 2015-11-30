@@ -184,9 +184,11 @@ public class Bookstore {
 				}
 				catch(NumberFormatException e){
 					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
+					selection = -1;
 				}
-				if (selection > courseList.size() || selection <= 0){
+				if (selection > courseList.size() || selection <= 0 && selection != -1){	
 					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
+					selection = -1;
 				}
 			}while (selection > courseList.size() || selection <= 0);
 			
