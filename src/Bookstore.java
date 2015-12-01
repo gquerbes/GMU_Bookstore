@@ -1,10 +1,13 @@
 import javax.swing.JOptionPane;
 
 import java.util.*;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Bookstore {
 
@@ -181,15 +184,25 @@ public class Bookstore {
 			do{
 				try{
 					selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
+					
+					if (selection > courseList.size() || selection <= 0){
+						throw new IllegalArgumentException();
+						
+					}
 				}
 				catch(NumberFormatException e){
 					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
 					selection = -1;
 				}
+<<<<<<< HEAD
+				catch(IllegalArgumentException e) {
+=======
 				if (selection > courseList.size() || selection <= 0 && selection != -1){	
+>>>>>>> master
 					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
 					selection = -1;
 				}
+				
 			}while (selection > courseList.size() || selection <= 0);
 			
 			//add a course to student list of courses if its not already added to student's courses
@@ -260,7 +273,7 @@ public class Bookstore {
 		do{
 			password = JOptionPane.showInputDialog("Please enter desired password");
 			if(!aStudent.setPassword(password)){
-				JOptionPane.showMessageDialog(null,"Password does not meet requirements \nTry Again.");
+				JOptionPane.showMessageDialog(null,"Password does not meet requirements. Minimum 8 characters\nTry Again.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setPassword(password));
 		
@@ -285,7 +298,7 @@ public class Bookstore {
 		do{
 			GNum = (JOptionPane.showInputDialog("Please enter your G-number"));
 			if(!aStudent.setgNumber(GNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry! Please write your GNumber in this format 00XXXXXX \nPlease try again", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setgNumber(GNum));
 		
@@ -293,7 +306,7 @@ public class Bookstore {
 		do{
 			phoneNum = (JOptionPane.showInputDialog("Please enter your phone number"));
 			if(!aStudent.setPhoneNumber(phoneNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry. Please write your phone number in XXXXXXXXXX format \nPlease try again","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setPhoneNumber(phoneNum));
 				
@@ -301,7 +314,7 @@ public class Bookstore {
 		do{
 			email = (JOptionPane.showInputDialog("Please enter your Email address"));
 			if(!aStudent.setEmail(email)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry, correct format: abc@efg.com \nPlease try again","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setEmail(email));
 		
@@ -316,7 +329,16 @@ public class Bookstore {
 		
 		
 		JOptionPane.showMessageDialog(null, "Your account has been created");
-		
+		try { 
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("accounts.txt", true)));
+			
+	                pw.println("\r\n-"+aStudent.getFirstName() +","+aStudent.getLastName() +","+aStudent.getgNumber()+","+aStudent.getPassword()+","+aStudent.getPhoneNumber() +","+aStudent.getEmail()+","+aStudent.getUsername() +","+aStudent.getShippingAddress());
+	         	    pw.close();
+	         
+		}
+			 catch (IOException e) {
+				 e.printStackTrace();
+			 }
 		
 		studentList.add(aStudent);
 		return aStudent;
