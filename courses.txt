@@ -1,0 +1,11 @@
+-IT306,Data Structures and Algorithms,1
+-IT315,iOS 8 for Programmers,10
+-IT314,Oracle 11g SQL,0
+-IT206,Big Java Late Objects,5
+-IT207,PHP Programming with MySQL,20
+-IT341,Network Fundamentals,40
+-IT343,Resources Planning,15
+-IT308,Event Driven Programming,20
+-IT410,Web Programming,10
+-IT369,Data and Application Security,5
+-IT414,Database Administration,4
