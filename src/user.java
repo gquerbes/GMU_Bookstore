@@ -8,8 +8,6 @@ public abstract class user {
     private String phoneNumber;
     private String email;
     private String username;
-    
-    
 	
 	
 }
