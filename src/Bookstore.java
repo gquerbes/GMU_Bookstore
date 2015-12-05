@@ -234,7 +234,33 @@ public class Bookstore {
 	
 	}
 	
-	
+	public static void addCourse(LinkedList<Course> courseList){
+		String courseName ="";
+		String courseText="";
+		int textStock = -1;
+		
+		Course aCourse = new Course();
+		
+		do{
+			courseName = JOptionPane.showInputDialog("Please enter the course name");
+		}while(!(aCourse.setCourseName(courseName)));
+		
+		do{
+			courseText = JOptionPane.showInputDialog("Please enter the textbook name for " + courseName);
+		}while(!(aCourse.setCourseText(courseText)));
+		
+		do{
+			try{
+				textStock = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the books in stock"));
+			}
+			catch(NumberFormatException e){
+				JOptionPane.showMessageDialog(null,"The number of books in stock must be a numerical value");
+			}
+		}while((!aCourse.setTextStock(textStock)));
+		
+		courseList.add(aCourse);
+		
+	}
 	
 	/**
 	 * @param studentList
@@ -352,7 +378,10 @@ public class Bookstore {
 		String input = "";
 		do{
 			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
-			if (input.equals("2")){
+			if(input.equals("3")){
+				addCourse(courseList);
+			}
+			else if (input.equals("2")){
 				JOptionPane.showMessageDialog(null, "Goodbye");
 				dataToFiles(courseList);
 			}

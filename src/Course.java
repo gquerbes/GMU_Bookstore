@@ -33,23 +33,32 @@ public class Course {
      * This method set the course name.
      * @param courseName
      */
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public boolean setCourseName(String courseName) {
+    	if(courseName.length()>=5){
+    		this.courseName = courseName;
+    		return true;
+    	}
+    	else{
+    		return false;
+    	}
+        
     }
 
     /**
      * This method sets the course text.
      * @param courseText
      */
-    public void setCourseText(String courseText) {
+    public boolean setCourseText(String courseText) {
         this.courseText = courseText;
+        return true;
     }
     /**
      * This method sets the textbook stock
      * @param textStock
      */
-    public void setTextStock(int textStock) {
+    public boolean setTextStock(int textStock) {
         this.textStock = textStock;
+        return true;
     }
     /**
      * This method returns the course name
