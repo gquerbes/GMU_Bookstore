@@ -4,7 +4,7 @@
  * @author Ishan Shams
  * @author Gabriel Querbes
  */
-public class Course {
+public class Course extends User{
 	/**
 	 * This method returns the total number of courses added by the students.
 	 * @return numCourses

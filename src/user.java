@@ -1,5 +1,6 @@
+import java.util.LinkedList;
 
-public abstract class user {
+public abstract class User {
 
 	private String firstName;
     private String lastName;

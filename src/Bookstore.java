@@ -148,7 +148,8 @@ public class Bookstore {
 			String address = s1.substring(addressStart);
 			
 			//create student object and populate info
-			Student aStudent = new Student(username);
+			Student aStudent = new Student(username); //DIASABLE ONCE DDC HAS INHERITENCE
+			//User aStudent = new Student(username); ENABLE ONCE DDC HAS INHERITENCE
 			aStudent.setFirstName(fName);
 			aStudent.setLastName(lName);
 			aStudent.setgNumber(gNumber);
@@ -415,7 +416,7 @@ public class Bookstore {
 				
 			}
 		}
-		
+		//if (aStudent.instancOf())
 		menu(courseList,aStudent,studentList);
 		
 	}
