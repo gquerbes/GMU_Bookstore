@@ -243,11 +243,17 @@ public class Bookstore {
 		Course aCourse = new Course();
 		
 		do{
-			courseName = JOptionPane.showInputDialog("Please enter the course name");
+			courseName = JOptionPane.showInputDialog("Please enter the course name in the format ITXXX (where XXX are numbers");
+			if(!aCourse.setCourseName(courseName)) {
+				JOptionPane.showMessageDialog(null, "The course name must be atleast 5 characters long in this format: ITXXX", "Invalid Course Name", JOptionPane.ERROR_MESSAGE);
+			}
 		}while(!(aCourse.setCourseName(courseName)));
 		
 		do{
 			courseText = JOptionPane.showInputDialog("Please enter the textbook name for " + courseName);
+			if(!aCourse.setCourseText(courseText)) {
+				JOptionPane.showMessageDialog(null, "Invalid course text", "Invalid Course Text", JOptionPane.ERROR_MESSAGE);
+			}
 		}while(!(aCourse.setCourseText(courseText)));
 		
 		do{
