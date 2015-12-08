@@ -1,10 +1,13 @@
 import javax.swing.JOptionPane;
 
 import java.util.*;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Bookstore {
 
@@ -145,7 +148,8 @@ public class Bookstore {
 			String address = s1.substring(addressStart);
 			
 			//create student object and populate info
-			Student aStudent = new Student(username);
+			Student aStudent = new Student(username); //DIASABLE ONCE DDC HAS INHERITENCE
+			//User aStudent = new Student(username); ENABLE ONCE DDC HAS INHERITENCE
 			aStudent.setFirstName(fName);
 			aStudent.setLastName(lName);
 			aStudent.setgNumber(gNumber);
@@ -181,15 +185,21 @@ public class Bookstore {
 			do{
 				try{
 					selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
+					
+					if (selection > courseList.size() || selection <= 0){
+						throw new IllegalArgumentException();
+						
+					}
 				}
 				catch(NumberFormatException e){
 					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
 					selection = -1;
 				}
-				if (selection > courseList.size() || selection <= 0 && selection != -1){	
+				catch(IllegalArgumentException e) {
 					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
 					selection = -1;
 				}
+				
 			}while (selection > courseList.size() || selection <= 0);
 			
 			//add a course to student list of courses if its not already added to student's courses
@@ -225,7 +235,33 @@ public class Bookstore {
 	
 	}
 	
-	
+	public static void addCourse(LinkedList<Course> courseList){
+		String courseName ="";
+		String courseText="";
+		int textStock = -1;
+		
+		Course aCourse = new Course();
+		
+		do{
+			courseName = JOptionPane.showInputDialog("Please enter the course name");
+		}while(!(aCourse.setCourseName(courseName)));
+		
+		do{
+			courseText = JOptionPane.showInputDialog("Please enter the textbook name for " + courseName);
+		}while(!(aCourse.setCourseText(courseText)));
+		
+		do{
+			try{
+				textStock = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the books in stock"));
+			}
+			catch(NumberFormatException e){
+				JOptionPane.showMessageDialog(null,"The number of books in stock must be a numerical value");
+			}
+		}while((!aCourse.setTextStock(textStock)));
+		
+		courseList.add(aCourse);
+		
+	}
 	
 	/**
 	 * @param studentList
@@ -260,7 +296,7 @@ public class Bookstore {
 		do{
 			password = JOptionPane.showInputDialog("Please enter desired password");
 			if(!aStudent.setPassword(password)){
-				JOptionPane.showMessageDialog(null,"Password does not meet requirements \nTry Again.");
+				JOptionPane.showMessageDialog(null,"Password does not meet requirements. Minimum 8 characters\nTry Again.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setPassword(password));
 		
@@ -285,7 +321,7 @@ public class Bookstore {
 		do{
 			GNum = (JOptionPane.showInputDialog("Please enter your G-number"));
 			if(!aStudent.setgNumber(GNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry! Please write your GNumber in this format 00XXXXXX \nPlease try again", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setgNumber(GNum));
 		
@@ -293,7 +329,7 @@ public class Bookstore {
 		do{
 			phoneNum = (JOptionPane.showInputDialog("Please enter your phone number"));
 			if(!aStudent.setPhoneNumber(phoneNum)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry. Please write your phone number in XXXXXXXXXX format \nPlease try again","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setPhoneNumber(phoneNum));
 				
@@ -301,7 +337,7 @@ public class Bookstore {
 		do{
 			email = (JOptionPane.showInputDialog("Please enter your Email address"));
 			if(!aStudent.setEmail(email)){
-				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
+				JOptionPane.showMessageDialog(null, "Invalid entry, correct format: abc@efg.com \nPlease try again","Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}while(!aStudent.setEmail(email));
 		
@@ -316,7 +352,16 @@ public class Bookstore {
 		
 		
 		JOptionPane.showMessageDialog(null, "Your account has been created");
-		
+		try { 
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("accounts.txt", true)));
+			
+	                pw.println("\r\n-"+aStudent.getFirstName() +","+aStudent.getLastName() +","+aStudent.getgNumber()+","+aStudent.getPassword()+","+aStudent.getPhoneNumber() +","+aStudent.getEmail()+","+aStudent.getUsername() +","+aStudent.getShippingAddress());
+	         	    pw.close();
+	         
+		}
+			 catch (IOException e) {
+				 e.printStackTrace();
+			 }
 		
 		studentList.add(aStudent);
 		return aStudent;
@@ -334,7 +379,10 @@ public class Bookstore {
 		String input = "";
 		do{
 			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
-			if (input.equals("2")){
+			if(input.equals("3")){
+				addCourse(courseList);
+			}
+			else if (input.equals("2")){
 				JOptionPane.showMessageDialog(null, "Goodbye");
 				dataToFiles(courseList);
 			}
@@ -368,7 +416,7 @@ public class Bookstore {
 				
 			}
 		}
-		
+		//if (aStudent.instancOf())
 		menu(courseList,aStudent,studentList);
 		
 	}

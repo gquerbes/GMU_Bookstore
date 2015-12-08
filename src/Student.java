@@ -5,6 +5,12 @@ import java.util.LinkedList;
  * It will store the student information such as first and last name,
  * GNumber, password, phone number, email address, username, and shipping address.
  * This class will also store student's enrolled courses.
+ * 
+ * 
+ * INCLUDE READ ME FILE WITH INSTRUCTIONS FOR PROFESSOR SO SHE CAN SEE THE CHANGES FROM
+ * THE FIRST PRESENTATION, AND HOW TO TEST THEM
+ * 
+ * 
  * @author Ishan Shams
  * @author Gabriel Querbes
  *
