@@ -33,17 +33,18 @@ public class Bookstore {
 		populateCourses(courseList);
 		
 		//populate student accounts from file
-		LinkedList<Student> studentList = new LinkedList<Student>();
-		populateStudentAccounts(studentList);
+		LinkedList<User> userList = new LinkedList<User>();
+		//*LinkedList<Student> userList = new LinkedList<Student>();
+		populateStudentAccounts(userList);
 		
 		
 		//take user to login screen
-		//Student aStudent = login(studentList,courseList);
+		//Student aStudent = login(userList,courseList);
 		
-		login(studentList,courseList);
+		login(userList,courseList);
 		
 		//send current student to menu for textbook ordering
-		//menu(courseList, aStudent, studentList);
+		//menu(courseList, aStudent, userList);
 		
 		//outputs the textbook reservation to a file
 		dataToFiles(courseList);
@@ -98,12 +99,12 @@ public class Bookstore {
 	
 	
 	public static boolean createAdmin(){
-		User myAdmin = new Admin("Admin");
+		User myAdmin = new Admin("admin");
 		myAdmin.setEmail("admin@admin.com");
 		myAdmin.setFirstName("FirstAdmin");
 		myAdmin.setLastName("lastAdmin");
 		myAdmin.setgNumber("00800000");
-		myAdmin.setPassword("abc12345");
+		myAdmin.setPassword("password");
 		myAdmin.setPhoneNumber("5555555555");
 	
 		String username = JOptionPane.showInputDialog(null, "Enter admin username");
@@ -111,9 +112,11 @@ public class Bookstore {
 		String password = JOptionPane.showInputDialog(null, "Enter admin Password");
 		
 		if(username.equals(myAdmin.getUsername()) && password.equals(myAdmin.getPassword())){
+			
 			return true;
 		}
 		else{
+			JOptionPane.showMessageDialog(null,"Bad password: **Hint: username = 'admin' :: password = 'password'");
 			return false;
 		}
 		
@@ -121,21 +124,22 @@ public class Bookstore {
 	
 	
 	/**
-	 * @param studentList
+	 * @param userList
 	 * Populate system with list of students accounts from text file
 	 */
-	public static void populateStudentAccounts(LinkedList <Student> studentList){
+	public static void populateStudentAccounts(LinkedList <User> userList){
 		Scanner inputStream = null;
 		//open text file of accounts
 		try{
 			inputStream = new Scanner (new FileInputStream("accounts.txt"));
+			//System.out.println("accounts file read");
 		}
 		catch(FileNotFoundException e){
 			JOptionPane.showMessageDialog(null, "The file \"accounts.txt\" could not be found");
 			JOptionPane.showMessageDialog(null, "The system will now exit");
 			System.exit(0);
 		}
-		
+	
 			
 		//Pull line of text to generate a student 
 		while(inputStream.hasNextLine()){
@@ -173,19 +177,23 @@ public class Bookstore {
 			String address = s1.substring(addressStart);
 			
 			//create student object and populate info
-			Student aStudent = new Student(username); //DIASABLE ONCE DDC HAS INHERITENCE
-			//User aStudent = new Student(username); ENABLE ONCE DDC HAS INHERITENCE
+			User aStudent = new Student(username); 
 			aStudent.setFirstName(fName);
 			aStudent.setLastName(lName);
 			aStudent.setgNumber(gNumber);
 			aStudent.setPassword(password);
 			aStudent.setPhoneNumber(phoneNumber);
 			aStudent.setEmail(email);
-			aStudent.setShippingAddress(address);
+			if(aStudent instanceof Student){
+				((Student) aStudent).setShippingAddress(address);
+			}
+			
 			
 			//add Student to list
-			studentList.add(aStudent);			
+			userList.add(aStudent);
+			System.out.println(userList.size());
 		}
+		
 		
 	}
 	
@@ -195,7 +203,7 @@ public class Bookstore {
 	 * @param allCourses
 	 * @param aStudent
 	 */
-	public static void menu (LinkedList<Course> courseList, User aUser, LinkedList <Student> studentList){
+	public static void menu (LinkedList<Course> courseList, User aUser, LinkedList <User> userList){
 		int selection = -1;
 		final int MAX_COURSES = 7;
 		boolean more;
@@ -260,20 +268,20 @@ public class Bookstore {
 			JOptionPane.showMessageDialog(null, "Your order has been entered\n");
 		}
 		else{
-			Admin tempAdmin;
+			//Admin tempAdmin;
 			addCourse (courseList);
 		}
 		
 		
 		
 		//return user to login screen
-		login(studentList,courseList);
+		login(userList,courseList);
 		
 	
 	}
 	
 	public static void addCourse(LinkedList<Course> courseList){
-		
+		JOptionPane.showMessageDialog(null,"Welcome to the admin menu.\nLet's add new courses!");
 		String courseName ="";
 		String courseText="";
 		int textStock = -1;
@@ -283,7 +291,7 @@ public class Bookstore {
 			do{
 				courseName = JOptionPane.showInputDialog("Please enter the course name in the format ITXXX (where XXX are numbers");
 				if(!aCourse.setCourseName(courseName)) {
-					JOptionPane.showMessageDialog(null, "The course name must be atleast 5 characters long in this format: ITXXX", "Invalid Course Name", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "May be already in use or in incorrect format.\nThe course name must be atleast 5 characters long in this format: ITXXX", "Invalid Course Name", JOptionPane.ERROR_MESSAGE);
 				}
 			}while(!(aCourse.setCourseName(courseName)));
 			
@@ -310,11 +318,11 @@ public class Bookstore {
 	}
 	
 	/**
-	 * @param studentList
+	 * @param userList
 	 * @return Student
 	 * Register new student by prompting them for user info
 	 */
-	public static Student registerStudentAccount(LinkedList <Student> studentList){
+	public static Student registerStudentAccount(LinkedList <User> userList){
 		String username ="";
 		String password ="";
 		String first ="";
@@ -323,12 +331,12 @@ public class Bookstore {
 		String phoneNum ="";
 		String email ="";
 		String address ="";
-		Student aStudent=null;
+		User aStudent=null;
 		
 		//prompt for username until available username is entered
 		do{
 			username = JOptionPane.showInputDialog("Please enter desired username");
-			aStudent = validateUsername(username,studentList);
+			aStudent = validateUsername(username,userList);
 			if (aStudent != null){
 				JOptionPane.showMessageDialog(null, "This username is already in use!\nPlease try again");
 			}
@@ -388,12 +396,14 @@ public class Bookstore {
 		}while(!aStudent.setEmail(email));
 		
 		//prompt for address until valid entry is made
+		Student nStudent = (Student) aStudent;
+		
 		do{
 			address = (JOptionPane.showInputDialog("Please enter your shipping address"));
-			if(!aStudent.setShippingAddress(address)){
+			if(!nStudent.setShippingAddress(address)){
 				JOptionPane.showMessageDialog(null, "Invalid entry \nPlease try again");
 			}
-		}while(!aStudent.setShippingAddress(address));
+		}while(!nStudent.setShippingAddress(address));
 		
 		
 		
@@ -401,7 +411,7 @@ public class Bookstore {
 		try { 
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("accounts.txt", true)));
 			
-	                pw.println("\r\n-"+aStudent.getFirstName() +","+aStudent.getLastName() +","+aStudent.getgNumber()+","+aStudent.getPassword()+","+aStudent.getPhoneNumber() +","+aStudent.getEmail()+","+aStudent.getUsername() +","+aStudent.getShippingAddress());
+	                pw.println("\r\n-"+aStudent.getFirstName() +","+aStudent.getLastName() +","+aStudent.getgNumber()+","+aStudent.getPassword()+","+aStudent.getPhoneNumber() +","+aStudent.getEmail()+","+aStudent.getUsername() +","+nStudent.getShippingAddress());
 	         	    pw.close();
 	         
 		}
@@ -409,18 +419,18 @@ public class Bookstore {
 				 e.printStackTrace();
 			 }
 		
-		studentList.add(aStudent);
-		return aStudent;
+		userList.add(aStudent);
+		return nStudent;
 	}
 	
 	
 
 	/**
-	 * @param studentList
+	 * @param userList
 	 * @return student
 	 * Prompt username and password and find match, if no match give user option to create a new account
 	 */
-	public static void login(LinkedList <Student> studentList,LinkedList<Course> courseList){
+	public static void login(LinkedList <User> userList,LinkedList<Course> courseList){
 		//Prompt user to login or terminate systems
 		
 		String input = "";
@@ -433,30 +443,34 @@ public class Bookstore {
 			}
 			else if(input.equals("2")){
 				if(createAdmin()){
+					System.out.println("admincreated");
 					addCourse(courseList);
+					
 				}
-				else{
+				else if (input.equals("1")){
 					JOptionPane.showMessageDialog(null, "incorrect credentials");
-					login(studentList,courseList);
-				}
-				
+					login(userList,courseList);
+				}	
 			}
+			
 			else if (input.equals("1")){}
 			else {JOptionPane.showMessageDialog(null,"Invalid selection, Try again.");}
 		}while (!(input.equals("1")));
 		
 		String username = JOptionPane.showInputDialog(null, "Enter username");
 		String password = JOptionPane.showInputDialog(null, "Please enter your password");
-		Student aStudent = validateUsername(username,studentList);
+		User aStudent = validateUsername(username,userList);
+		System.out.print(validateUsername(username,userList));
+		
 
 		//Loop through users and look for match, If non found, use 'registerStudenAccount' method to create and return a student
 		if(aStudent == null){
 			int selection = JOptionPane.showConfirmDialog(null, "Account does not exist\nWould you like to create a new account?\n'NO' to try another account 'YES' to create a new account","title", JOptionPane.YES_NO_OPTION);
 			if(selection == 1){
-				login(studentList,courseList);
+				login(userList,courseList);
 			}
 			else if (selection == 0){
-				aStudent = registerStudentAccount(studentList);
+				aStudent = registerStudentAccount(userList);
 			}
 		}
 		//Alert use of incorrect passwords
@@ -465,14 +479,14 @@ public class Bookstore {
 				do{
 					password = JOptionPane.showInputDialog("Incorrect password entered\nTry again or enter 'D' to return to main screen");
 					if(password.equalsIgnoreCase("D")){
-						login(studentList,courseList);
+						login(userList,courseList);
 					}
 				}while(!(validatePassword(aStudent,password)));
 				
 			}
 		}
 		//if (aStudent.instancOf())
-		menu(courseList,aStudent,studentList);
+		menu(courseList,aStudent,userList);
 		
 	}
 	
@@ -480,20 +494,21 @@ public class Bookstore {
 	
 	/**
 	 * @param username
-	 * @param studentList
+	 * @param userList
 	 * @return student
 	 * Validate if user account exists
 	 */
-	public static Student validateUsername(String username, LinkedList <Student> studentList){
-		Student aStudent = null;
-		for(int i =0; i < studentList.size(); i++){
-			if (username.equals(studentList.get(i).getUsername())){
-				aStudent = studentList.get(i);
-				return aStudent;
+	public static User validateUsername(String username, LinkedList <User> userList){
+		User aUser = null;
+		for(int i =0; i < userList.size(); i++){
+			if (username.equals(userList.get(i).getUsername())){
+				//System.out.println(userList.get(i).getUsername());
+				aUser = userList.get(i);
+				return aUser;
 			}
 		}
-		
-		return aStudent;
+		//null student if not found
+		return aUser;
 	}
 	
 	
@@ -503,9 +518,10 @@ public class Bookstore {
 	 * @return if valid
 	 * validate if password matches the user
 	 */
-	public static boolean validatePassword (Student aStudent, String aPassword){
+	public static boolean validatePassword (User aStudent, String aPassword){
 		boolean isValid = false;
 		if (aStudent.getPassword().equals(aPassword)){
+			System.out.println(aStudent.getPassword());
 			isValid = true;
 		}
 		else {isValid = false;}
