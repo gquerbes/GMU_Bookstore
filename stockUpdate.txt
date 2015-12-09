@@ -9,4 +9,4 @@ Course name: IT308 Text: Event Driven Programming, and the stock remaining: 20
 Course name: IT410 Text: Web Programming, and the stock remaining: 10
 Course name: IT369 Text: Data and Application Security, and the stock remaining: 5
 Course name: IT414 Text: Database Administration, and the stock remaining: 4
-Course name: IT999 Text: Something, and the stock remaining: 9
+Course name: IT213 Text: Something, and the stock remaining: -1

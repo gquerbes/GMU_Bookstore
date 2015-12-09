@@ -36,6 +36,7 @@ public class Bookstore {
 		LinkedList<Student> studentList = new LinkedList<Student>();
 		populateStudentAccounts(studentList);
 		
+		
 		//take user to login screen
 		//Student aStudent = login(studentList,courseList);
 		
@@ -94,6 +95,30 @@ public class Bookstore {
 			courseList.add(aCourse);
 		}
 	}
+	
+	
+	public static boolean createAdmin(){
+		User myAdmin = new Admin("Admin");
+		myAdmin.setEmail("admin@admin.com");
+		myAdmin.setFirstName("FirstAdmin");
+		myAdmin.setLastName("lastAdmin");
+		myAdmin.setgNumber("00800000");
+		myAdmin.setPassword("abc12345");
+		myAdmin.setPhoneNumber("5555555555");
+	
+		String username = JOptionPane.showInputDialog(null, "Enter admin username");
+		
+		String password = JOptionPane.showInputDialog(null, "Enter admin Password");
+		
+		if(username.equals(myAdmin.getUsername()) && password.equals(myAdmin.getPassword())){
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	
 	
 	/**
 	 * @param studentList
@@ -170,64 +195,76 @@ public class Bookstore {
 	 * @param allCourses
 	 * @param aStudent
 	 */
-	public static void menu (LinkedList<Course> courseList, Student aStudent, LinkedList <Student> studentList){
+	public static void menu (LinkedList<Course> courseList, User aUser, LinkedList <Student> studentList){
 		int selection = -1;
 		final int MAX_COURSES = 7;
 		boolean more;
-		String menuPrompt = "Welcome to the GMU IT Bookstore!"
-				+ "\nPlease enter the number that corresponds to one of your classes";
-		for(int i =0; i<courseList.size(); i++){
-			Course aCourse = courseList.get(i);
-			menuPrompt += "\n"+ (i+1) +") "+ aCourse.getCourseName();
-		}
 		
-		do{
+		//send user if admin to add course
+		Student aStudent = new Student();
+		if(aUser instanceof Student){
+			aStudent = (Student) aUser;
+			String menuPrompt = "Welcome to the GMU IT Bookstore!"
+					+ "\nPlease enter the number that corresponds to one of your classes";
+			for(int i =0; i<courseList.size(); i++){
+				Course aCourse = courseList.get(i);
+				menuPrompt += "\n"+ (i+1) +") "+ aCourse.getCourseName();
+			}
+			
 			do{
-				try{
-					selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
-					
-					if (selection > courseList.size() || selection <= 0){
-						throw new IllegalArgumentException();
+				do{
+					try{
+						selection = Integer.parseInt(JOptionPane.showInputDialog(menuPrompt));
 						
+						if (selection > courseList.size() || selection <= 0){
+							throw new IllegalArgumentException();
+							
+						}
 					}
+					catch(NumberFormatException e){
+						JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
+						selection = -1;
+					}
+					catch(IllegalArgumentException e) {
+						JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
+						selection = -1;
+					}
+					
+				}while (selection > courseList.size() || selection <= 0);
+				
+				//add a course to student list of courses if its not already added to student's courses
+				if(aStudent.getCourseList().contains(courseList.get(selection-1))){
+					JOptionPane.showMessageDialog(null,"You have already ordered this book");
 				}
-				catch(NumberFormatException e){
-					JOptionPane.showMessageDialog(null, "Invalid entry, please enter number associated with course");
-					selection = -1;
+				else if(aStudent.getCourseList().size() >= MAX_COURSES){
+					JOptionPane.showMessageDialog(null,"You have already registered "+ MAX_COURSES + " courses, the max number allowed");
+					break;
 				}
-				catch(IllegalArgumentException e) {
-					JOptionPane.showMessageDialog(null, "Invalid Selection. Try again.");
-					selection = -1;
+				else{
+					if(courseList.get(selection-1).getTextStock()<1){
+						JOptionPane.showMessageDialog(null,"This book is backordered and will take extra processing time");
+					}
+					Course aCourse = (courseList.get(selection-1));
+					aStudent.addCourse(aCourse);	
+					JOptionPane.showMessageDialog(null, courseList.get(selection-1).getCourseText() +" Has been added to your cart");
 				}
 				
-			}while (selection > courseList.size() || selection <= 0);
+				
+				//prompt student if they would like to continue entering courses
+				int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
+				if (reply == 1){more = false;}
+				else {more = true;}
+			}while (more && (aStudent.getCourseList().size() <= MAX_COURSES));
 			
-			//add a course to student list of courses if its not already added to student's courses
-			if(aStudent.getCourseList().contains(courseList.get(selection-1))){
-				JOptionPane.showMessageDialog(null,"You have already ordered this book");
-			}
-			else if(aStudent.getCourseList().size() >= MAX_COURSES){
-				JOptionPane.showMessageDialog(null,"You have already registered "+ MAX_COURSES + " courses, the max number allowed");
-				break;
-			}
-			else{
-				if(courseList.get(selection-1).getTextStock()<1){
-					JOptionPane.showMessageDialog(null,"This book is backordered and will take extra processing time");
-				}
-				Course aCourse = (courseList.get(selection-1));
-				aStudent.addCourse(aCourse);	
-				JOptionPane.showMessageDialog(null, courseList.get(selection-1).getCourseText() +" Has been added to your cart");
-			}
-			
-			
-			//prompt student if they would like to continue entering courses
-			int reply  = JOptionPane.showConfirmDialog(null, "Do you have another class to enter?","title", JOptionPane.YES_NO_OPTION);
-			if (reply == 1){more = false;}
-			else {more = true;}
-		}while (more && (aStudent.getCourseList().size() <= MAX_COURSES));
+			//Give confirmation of order
+			JOptionPane.showMessageDialog(null, "Your order has been entered\n");
+		}
+		else{
+			Admin tempAdmin;
+			addCourse (courseList);
+		}
 		
-		//Give confirmation of order
-		JOptionPane.showMessageDialog(null, "Your order has been entered\n");
+		
 		
 		//return user to login screen
 		login(studentList,courseList);
@@ -236,30 +273,39 @@ public class Bookstore {
 	}
 	
 	public static void addCourse(LinkedList<Course> courseList){
+		
 		String courseName ="";
 		String courseText="";
 		int textStock = -1;
 		
 		Course aCourse = new Course();
-		
 		do{
-			courseName = JOptionPane.showInputDialog("Please enter the course name");
-		}while(!(aCourse.setCourseName(courseName)));
+			do{
+				courseName = JOptionPane.showInputDialog("Please enter the course name in the format ITXXX (where XXX are numbers");
+				if(!aCourse.setCourseName(courseName)) {
+					JOptionPane.showMessageDialog(null, "The course name must be atleast 5 characters long in this format: ITXXX", "Invalid Course Name", JOptionPane.ERROR_MESSAGE);
+				}
+			}while(!(aCourse.setCourseName(courseName)));
+			
+			do{
+				courseText = JOptionPane.showInputDialog("Please enter the textbook name for " + courseName);
+				if(!aCourse.setCourseText(courseText)) {
+					JOptionPane.showMessageDialog(null, "Invalid course text", "Invalid Course Text", JOptionPane.ERROR_MESSAGE);
+				}
+			}while(!(aCourse.setCourseText(courseText)));
+			
+			do{
+				try{
+					textStock = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the books in stock"));
+				}
+				catch(NumberFormatException e){
+					JOptionPane.showMessageDialog(null,"The number of books in stock must be a numerical value");
+				}
+			}while((!aCourse.setTextStock(textStock)));
+			
+			courseList.add(aCourse);	
+		}while (JOptionPane.showConfirmDialog(null, "addAnother")== 0);
 		
-		do{
-			courseText = JOptionPane.showInputDialog("Please enter the textbook name for " + courseName);
-		}while(!(aCourse.setCourseText(courseText)));
-		
-		do{
-			try{
-				textStock = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the books in stock"));
-			}
-			catch(NumberFormatException e){
-				JOptionPane.showMessageDialog(null,"The number of books in stock must be a numerical value");
-			}
-		}while((!aCourse.setTextStock(textStock)));
-		
-		courseList.add(aCourse);
 		
 	}
 	
@@ -376,15 +422,24 @@ public class Bookstore {
 	 */
 	public static void login(LinkedList <Student> studentList,LinkedList<Course> courseList){
 		//Prompt user to login or terminate systems
+		
 		String input = "";
 		do{
-			input = JOptionPane.showInputDialog("Enter 1 to login or 2 to exit system");
-			if(input.equals("3")){
-				addCourse(courseList);
-			}
-			else if (input.equals("2")){
+			input = JOptionPane.showInputDialog("Enter 1 to login, 2 for admin course addition, or 3 to exit system");
+			
+			if (input.equals("3")){
 				JOptionPane.showMessageDialog(null, "Goodbye");
 				dataToFiles(courseList);
+			}
+			else if(input.equals("2")){
+				if(createAdmin()){
+					addCourse(courseList);
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "incorrect credentials");
+					login(studentList,courseList);
+				}
+				
 			}
 			else if (input.equals("1")){}
 			else {JOptionPane.showMessageDialog(null,"Invalid selection, Try again.");}

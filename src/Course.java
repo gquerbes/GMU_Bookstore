@@ -34,7 +34,7 @@ public class Course extends User{
      * @param courseName
      */
     public boolean setCourseName(String courseName) {
-    	if(courseName.length()>=5){
+    	if(courseName.length()==5){
     		this.courseName = courseName;
     		return true;
     	}
@@ -49,8 +49,13 @@ public class Course extends User{
      * @param courseText
      */
     public boolean setCourseText(String courseText) {
+    	if (courseText.length() <= 0) {
+    		return false;
+    	}
+    	else {
         this.courseText = courseText;
         return true;
+    	}
     }
     /**
      * This method sets the textbook stock
